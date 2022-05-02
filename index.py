@@ -23,8 +23,9 @@ def save() :
 
 def getstringbills(arr) : 
    if len(arr) > 0 : 
-    arr.bills[0] + ' - ' + arr.bills[-1]
+     return arr[0] + ' - ' + arr[-1]
    else : 
+       print(arr)
        return "" 
 
 class Date :
@@ -39,11 +40,13 @@ class Date :
     def addlogs(self,count_bills = 50) :
         print("New Process started")
         log = Log(count_bills,self) 
+        print(log,"done")
         self.current_log = log
         log.start()
         self.failure += (1 if log.failure else 0 )
         self.success += (0 if log.failure else 1 )
         self.bills += log.bills
+        print(log.bills)
         for key,value in log.lines_count.items() : 
             if key not in self.lines_count.keys() :
                 self.lines_count[key] = value
@@ -51,9 +54,8 @@ class Date :
         self.collection += [ collection["parCode"] for collection in  log.filtered_collection ]
         if log.collection == 1   : 
                self.creditlock = log.creditlock
-        self.current_log = log.__dict__
         save()
-        return  { "stats" : { "Current Process Bills Count" :len(self.bills)  ,'Current Process Collection Count' : len(self.collection)  ,
+        return  { "stats" : { "Current Process Bills Count" :len(log.bills)  ,'Current Process Collection Count' : len(log.collection)  ,
                  "Today Total Bills Count": len(self.bills)  ,'Today Total Collection Count' : len(self.collection) ,
                  "Bills (Total) " : getstringbills(self.bills)   , "Bills (Last Sync) " : getstringbills(log.bills)  ,
                  "SuccessFull" : self.success , "Failures" : self.failure }  ,
@@ -74,9 +76,14 @@ def status() :
 @app.route('/billindex')
 def index() :
     return app.send_static_file('index.html')
-#Logs = defaultdict(Date)
-with open('logs.pkl','rb') as f : 
-    Logs = pickle.load(f)
+try : 
+  with open('logs.pkl','rb') as f : 
+   Logs = pickle.load(f)
+except :
+    print("New Logs created , Before is stuck couldnt retrieve ")
+    Logs = defaultdict(Date)
+#with open('logs.pkl','rb') as f : 
+#   Logs = pickle.load(f)
 
 today = Logs[datetime.now().strftime('%d/%m/%Y')]
 dates = list(Logs.keys())

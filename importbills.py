@@ -157,8 +157,8 @@ class Log :
       _pdf = getajax('billpdf').replace('_billfrom_',self.billfrom).replace('_billto_',self.billto) 
       _txt = getajax('billtxt').replace('_billfrom_',self.billfrom).replace('_billto_',self.billto)
       intial = listdir(path) 
-      pdf = driver.execute_script(_pdf)
-      txt = driver.execute_script(_txt)
+      pdf = driver.execute_script(_pdf).split('/')[-1]
+      txt = driver.execute_script(_txt).split('/')[-1]
       for sleep in range(0,200) : 
         files = list( (set(listdir(path))^set(intial))& set(listdir(path)) )
         if pdf in files and txt in files :
@@ -171,12 +171,12 @@ class Log :
    def Printbill(self,driver) : 
      original = self.pdf 
      duplicate = self.txt 
-     rename(path+orignal,path+'output\\'+orignal)
+     rename(path+original,path+'output\\'+original)
      secondarybills.main(path+duplicate,path+'output\\'+duplicate.split('.')[0]+'.docx')
      self.secondcopy = path+'output\\'+duplicate.split('.')[0]+'.docx' 
-     self.firstcopy = path+'output\\'+orignal
+     self.firstcopy = path+'output\\'+original
      win32api.ShellExecute (0,'print',path+'output\\'+duplicate.split('.')[0]+'.docx',None, '.', 0 )
-     win32api.ShellExecute (0,'print',path+'output\\'+orignal,None, '.', 0 )
+     win32api.ShellExecute (0,'print',path+'output\\'+original,None, '.', 0 )
      return "Finished Printing"
    def status(self) :
      res = {}
