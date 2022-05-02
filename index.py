@@ -46,12 +46,12 @@ class Date :
         self.failure += (1 if log.failure else 0 )
         self.success += (0 if log.failure else 1 )
         self.bills += log.bills
-        print(log.bills)
         for key,value in log.lines_count.items() : 
             if key not in self.lines_count.keys() :
                 self.lines_count[key] = value
         self.lines_count.update(log.lines_count)
         self.collection += [ collection["parCode"] for collection in  log.filtered_collection ]
+        print(log.collection,log.bills,self.bills,log.creditlock )
         if log.collection == 1   : 
                self.creditlock = log.creditlock
         save()
