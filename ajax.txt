@@ -1,0 +1,322 @@
+_auth_
+/rsunify/app/user/authentication.do?
+{userId:"CREDIT",password:"Ven2005",dbName:"41A392",datetime: new Date().getTime() ,diff:-330 }
+_auth_
+_sync_
+return $.ajax({
+		url : '/rsunify/app/fileUploadId/download',
+		type : "POST",
+		data : {},
+		success: function(data){return data
+		}}) 
+_sync_
+		
+_getdelivery_		
+var filterData = {beatName: "",
+beatNameList: [],
+blhFromDt: "",
+blhSourceOfOrder: 0,
+blhToDt: "",
+locNameList: [],
+localityId: "",
+optimusSelect: 0,
+salesmanNameList: [],
+shakthiBusiness: "N",
+vehId: 0
+		}
+		return $.ajax({
+		url : '/rsunify/app/deliveryprocess/billsToBeDeliver.do',
+		type : "POST",
+		contentType :"application/json; charset=utf-8" ,
+		dataTye:"json",
+		data : JSON.stringify(filterData),
+		success: function(data){return data ;
+		}}) 
+		
+_getdelivery_
+_setdelivery_
+var bills = JSON.parse('_data_');
+var billist = [] ;
+bills.forEach( function(p) {
+billist.push({ blhDateStr:p.blhDateStr ,
+blhNetAmt:p.blhNetAmt ,
+blhRefrNo:p.blhRefrNo,
+blhSourceOfOrder:p.blhSourceOfOrder ,
+eposActive:p.eposActive ,
+parCstNo:p.parCstNo,
+partyPhoneNo:p.partyPhoneNo,
+semOutlet:p.semOutlet,
+shikharOutletAutoPosting:p.shikharOutletAutoPosting ,
+vehicleId: "1"})  ;
+});
+
+var deliveryProcessVO = { "deliveryProcessVOList":billist };
+return $.ajax({
+		url : '/rsunify/app/deliveryprocess/savebill.do',
+		type : "POST",
+		contentType :"application/json; charset=utf-8" ,
+		dataTye:"json",
+		data : JSON.stringify(deliveryProcessVO),
+		success: function(data){return data
+		}}) 
+_setdelivery_
+_billpdf_
+function download(url, filename) {
+fetch(url).then(function(t) {
+    return t.blob().then((b)=>{
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(b);
+        a.setAttribute("download", filename);
+        a.click();
+    }
+    );
+});
+}
+var url = `https://leveredge102.hulcd.com/rsunify/app/commonPdfRptContrl/pdfRptGeneration?strJsonParams=%7B%22billFrom%22%3A%22_billfrom_%22%2C%22billTo%22%3A%22_billto_%22%2C%22reportType%22%3A%22pdf%22%2C%22blhVatFlag%22%3A2%2C%22shade%22%3A1%2C%22pack%22%3A%22910%22%2C%22damages%22%3Anull%2C%22halfPage%22%3A0%2C%22bp_division%22%3A%22%22%2C%22salesMan%22%3A%22%22%2C%22party%22%3A%22%22%2C%22market%22%3A%22%22%2C%22planset%22%3A%22%22%2C%22fromDate%22%3A%22%22%2C%22toDate%22%3A%22%22%2C%22veh_Name%22%3A%22%22%2C%22printId%22%3A0%2C%22printerName%22%3A%22TVS+MSP+250+Star%22%2C%22Lable_position%22%3A2%2C%22billType%22%3A2%2C%22printOption%22%3A%220%22%2C%22RptClassName%22%3A%22BILL_PRINT_REPORT%22%2C%22reptName%22%3A%22billPrint%22%2C%22RptId%22%3A%22910%22%2C%22freeProduct%22%3A%22Default%22%2C%22shikharQrCode%22%3Anull%2C%22rptTypOpt%22%3A%22pdf%22%2C%22gstTypeVal%22%3A%221%22%2C%22billPrint_isPrint%22%3A0%2C%22units_only%22%3A%22Y%22%7D`
+return $.ajax ({
+ url:url,
+ method:'GET',
+ success: function (data) { 
+  var k = data ;
+  var name = k.split('/').pop() ;
+  download('/rsunify/reports/'+name,name);
+  return name ;
+ }   
+});
+_billpdf_
+
+_billtxt_
+function download(url, filename) {
+fetch(url).then(function(t) {
+    return t.blob().then((b)=>{
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(b);
+        a.setAttribute("download", filename);
+        a.click();
+    }
+    );
+});
+}
+var url = 'https://leveredge102.hulcd.com/rsunify/app/commonPdfRptContrl/pdfRptGeneration?strJsonParams=%7B%22billFrom%22%3A%22_billfrom_%22%2C%22billTo%22%3A%22_billto_%22%2C%22reportType%22%3A%22txt%22%2C%22blhVatFlag%22%3A2%2C%22shade%22%3A1%2C%22pack%22%3A%22910%22%2C%22damages%22%3Anull%2C%22halfPage%22%3A0%2C%22bp_division%22%3A%22%22%2C%22salesMan%22%3A%22%22%2C%22party%22%3A%22%22%2C%22market%22%3A%22%22%2C%22planset%22%3A%22%22%2C%22fromDate%22%3A%22%22%2C%22toDate%22%3A%22%22%2C%22veh_Name%22%3A%22%22%2C%22printId%22%3A1%2C%22printerName%22%3A%22TVS+MSP+250+Star%22%2C%22Lable_position%22%3A2%2C%22billType%22%3A2%2C%22printOption%22%3A%220%22%2C%22RptClassName%22%3A%22BILL_PRINT_REPORT%22%2C%22reptName%22%3A%22billPrint%22%2C%22RptId%22%3A%22910%22%2C%22freeProduct%22%3A%22Default%22%2C%22shikharQrCode%22%3Anull%2C%22rptTypOpt%22%3A%22txt%22%2C%22gstTypeVal%22%3A%221%22%2C%22billPrint_isPrint%22%3A1%2C%22units_only%22%3A%22Y%22%7D'
+ return $.ajax ({
+ url:url,
+ method:'GET',
+ success: function (data) { 
+  var k = data ;
+  var name = k.split('/').pop() ;
+  download('/rsunify/reports/'+name,name);
+  return name ;
+ }   
+});
+_billtxt_
+
+
+
+_sync_
+return $.ajax({
+		url : '/rsunify/app/fileUploadId/download',
+		type : "POST",
+		data : {},
+		success: function(data){return data
+		}}) 
+_sync_
+		
+_getdelivery_		
+var filterData = {beatName: "",
+beatNameList: [],
+blhFromDt: "",
+blhSourceOfOrder: 0,
+blhToDt: "",
+locNameList: [],
+localityId: "",
+optimusSelect: 0,
+salesmanNameList: [],
+shakthiBusiness: "N",
+vehId: 0
+		}
+		return $.ajax({
+		url : '/rsunify/app/deliveryprocess/billsToBeDeliver.do',
+		type : "POST",
+		contentType :"application/json; charset=utf-8" ,
+		dataTye:"json",
+		data : JSON.stringify(filterData),
+		success: function(data){return data ;
+		}}) 
+		
+_getdelivery_
+_setdelivery_
+var bills = JSON.parse('_data_');
+var billist = [] ;
+bills.forEach( function(p) {
+billist.push({ blhDateStr:p.blhDateStr ,
+blhNetAmt:p.blhNetAmt ,
+blhRefrNo:p.blhRefrNo,
+blhSourceOfOrder:p.blhSourceOfOrder ,
+eposActive:p.eposActive ,
+parCstNo:p.parCstNo,
+partyPhoneNo:p.partyPhoneNo,
+semOutlet:p.semOutlet,
+shikharOutletAutoPosting:p.shikharOutletAutoPosting ,
+vehicleId: "1"})  ;
+});
+
+var deliveryProcessVO = { "deliveryProcessVOList":billist };
+return $.ajax({
+		url : '/rsunify/app/deliveryprocess/savebill.do',
+		type : "POST",
+		contentType :"application/json; charset=utf-8" ,
+		dataTye:"json",
+		data : JSON.stringify(deliveryProcessVO),
+		success: function(data){return data
+		}}) 
+_setdelivery_
+_billpdf_
+function download(url, filename) {
+fetch(url).then(function(t) {
+    return t.blob().then((b)=>{
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(b);
+        a.setAttribute("download", filename);
+        a.click();
+    }
+    );
+});
+}
+var url = `https://leveredge102.hulcd.com/rsunify/app/commonPdfRptContrl/pdfRptGeneration?strJsonParams=%7B%22billFrom%22%3A%22_billfrom_%22%2C%22billTo%22%3A%22_billto_%22%2C%22reportType%22%3A%22pdf%22%2C%22blhVatFlag%22%3A2%2C%22shade%22%3A1%2C%22pack%22%3A%22910%22%2C%22damages%22%3Anull%2C%22halfPage%22%3A0%2C%22bp_division%22%3A%22%22%2C%22salesMan%22%3A%22%22%2C%22party%22%3A%22%22%2C%22market%22%3A%22%22%2C%22planset%22%3A%22%22%2C%22fromDate%22%3A%22%22%2C%22toDate%22%3A%22%22%2C%22veh_Name%22%3A%22%22%2C%22printId%22%3A0%2C%22printerName%22%3A%22TVS+MSP+250+Star%22%2C%22Lable_position%22%3A2%2C%22billType%22%3A2%2C%22printOption%22%3A%220%22%2C%22RptClassName%22%3A%22BILL_PRINT_REPORT%22%2C%22reptName%22%3A%22billPrint%22%2C%22RptId%22%3A%22910%22%2C%22freeProduct%22%3A%22Default%22%2C%22shikharQrCode%22%3Anull%2C%22rptTypOpt%22%3A%22pdf%22%2C%22gstTypeVal%22%3A%221%22%2C%22billPrint_isPrint%22%3A0%2C%22units_only%22%3A%22Y%22%7D`
+return $.ajax ({
+ url:url,
+ method:'GET',
+ success: function (data) { 
+  var k = data ;
+  var name = k.split('/').pop() ;
+  download('/rsunify/reports/'+name,name);
+  return name ;
+ }   
+});
+_billpdf_
+
+_billtxt_
+function download(url, filename) {
+fetch(url).then(function(t) {
+    return t.blob().then((b)=>{
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(b);
+        a.setAttribute("download", filename);
+        a.click();
+    }
+    );
+});
+}
+var url = 'https://leveredge102.hulcd.com/rsunify/app/commonPdfRptContrl/pdfRptGeneration?strJsonParams=%7B%22billFrom%22%3A%22_billfrom_%22%2C%22billTo%22%3A%22_billto_%22%2C%22reportType%22%3A%22txt%22%2C%22blhVatFlag%22%3A2%2C%22shade%22%3A1%2C%22pack%22%3A%22910%22%2C%22damages%22%3Anull%2C%22halfPage%22%3A0%2C%22bp_division%22%3A%22%22%2C%22salesMan%22%3A%22%22%2C%22party%22%3A%22%22%2C%22market%22%3A%22%22%2C%22planset%22%3A%22%22%2C%22fromDate%22%3A%22%22%2C%22toDate%22%3A%22%22%2C%22veh_Name%22%3A%22%22%2C%22printId%22%3A1%2C%22printerName%22%3A%22TVS+MSP+250+Star%22%2C%22Lable_position%22%3A2%2C%22billType%22%3A2%2C%22printOption%22%3A%220%22%2C%22RptClassName%22%3A%22BILL_PRINT_REPORT%22%2C%22reptName%22%3A%22billPrint%22%2C%22RptId%22%3A%22910%22%2C%22freeProduct%22%3A%22Default%22%2C%22shikharQrCode%22%3Anull%2C%22rptTypOpt%22%3A%22txt%22%2C%22gstTypeVal%22%3A%221%22%2C%22billPrint_isPrint%22%3A1%2C%22units_only%22%3A%22Y%22%7D'
+ return $.ajax ({
+ url:url,
+ method:'GET',
+ success: function (data) { 
+  var k = data ;
+  var name = k.split('/').pop() ;
+  download('/rsunify/reports/'+name,name);
+  return name ;
+ }   
+});
+_billtxt_
+_plain_
+ return $.ajax({
+    url : '_url_' ,
+	success: function(data) { return data ; }
+ });
+_plain_
+
+_creditlockdown_
+var jsonObj=  []
+var jsonObjforheaders= [{}]
+var jsonObjfileInfi= [{"title":"Credit Locking,Credit Locking","reportfilename":"Credit Locking","viewpage":"Credit_Limit_Setting_Upload/credit_limit_setting_upload","viewname":"Credit_Limit_Submit_Upload_SP","querycount":1}]
+var jsonObjWhereClause= {":beatList":"_beatkeys_"} //_beats_ ex: "9,16,15" beat keys 
+_creditlockdown_
+
+_outstanding_
+var jsonObj=  []
+var jsonObjforheaders= [{}]
+var jsonObjfileInfi= [{"title":"Outstanding Report-Beat Wise ,Outstanding Report,Outstanding Summary","reportfilename":"Outstanding Report","viewpage":"report/outstanding","viewname":"OUT_STANDING_REPORT","querycount":"2"}]
+var jsonObjWhereClause= {":val1":"Beat wise",":val2":"Party Level",":val3":"",":val4":"",":val5":"",":val6":"",":val7":"",":val8":"_fromd_",":val9":"_tod_",":val10":"_fromd_",":val11":"_tod_",":val12":"None",":val13":"Equals",":val14":"0.00",":val15":"Active",":val16":"Excel",":val17":""}
+var orderBy = "[Beat Name],[Party Name], CONVERT(DATETIME,[Bill Date],103)"
+_outstanding_
+
+_ajax_
+return $.ajax({method : "POST",
+		url : '/rsunify/app/reportsController/generatereport.do',
+		data : {
+			'jsonData' : JSON.stringify(jsonObj),
+	    	'jsonObjforheaders':JSON.stringify(jsonObjforheaders),
+	    	'jsonObjfileInfi':JSON.stringify(jsonObjfileInfi),
+	    	'jsonObjWhereClause':JSON.stringify(jsonObjWhereClause)
+		}, success : function(data) { return data } });
+_ajax_
+
+
+
+_salesman_
+JSON.stringify({"jasonParam":{"viewName":"VIEW_LOAD_SALESMAN_BEAT_LINK_SALESMAN_LIST","pageNumber":1,"pageSize":200,"columnToSearch":"","columnSearchText":"","textSearchType":"1"},"additionalJsonParam":{"additionalColumnToSearch":" ","additionalColumnSearchText":" ","additionalTextSearchType":" "},"columnSearchText":""})
+_salesman_
+
+_salesmanbeat_
+ {divisionId: 0 , salesmanId: _salesmanid_}
+_salesmanbeat_
+//"_orderdate_T18:30:00.000Z"
+_getmarketorder_
+JSON.stringify({"qtmBeatList":[],"qtmSalesList":[],"qtmPartyList":[],"orderDate":"_orderdate_T18:30:00.000Z","importDate":"_importdate_T18:30:00.000Z",
+ "futureData":false,"uniqueId":0,"qtmPONumberList":[],"qtmShikharList":[],"sourceOfOrder":"'N','B'","paymentType":"ALL","isRaPartialBilled":0})
+_getmarketorder_
+
+_setmarketorder_
+JSON.stringify({"orderDetails":JSON.parse(`_orders_`),"importDate":"_date_","callingFrom":1,"applyTcs":true,"CLIENT_REQ_UID":"l2hgg_rand_vt8agyg4sjf"})
+_setmarketorder_ 
+
+_setcollection_
+JSON.stringify({"collectionDetails":JSON.parse(`_collections_`),"importDate":"_date_","rsBankId":1,"CLIENT_REQ_UID":"l2hgg_rand_vt8agyg4sjf"})
+_setcollection_ 
+
+
+
+_datarequest_
+return $.ajax({
+    url:'_url_',
+    method:"POST",
+    contentType: '_content_' ,
+    data: _data_,
+    success:function (data) { return data ;}
+});
+_datarequest_
+
+
+
+_download_
+ window.open("/rsunify/app/reportsController/downloadReport?filePath=_dpath_","_blank");
+_download_
+
+
+
+
+
+blhDateStr: h.blhDateStr
+blhNetAmt: h.blhNetAmt,
+blhRefrNo: h.blhRefrNo
+blhSourceOfOrder: h.blhSourceOfOrder
+eposActive: 0
+parCstNo: 0
+partyPhoneNo: h.partyPhoneNo
+semOutlet: "0"
+shikharOutletAutoPosting: "0"
+vehicleId: "1"
+
+
+
+blhDateStr: h.blhDateStr
+blhNetAmt: h.blhNetAmt,
+blhRefrNo: h.blhRefrNo
+blhSourceOfOrder: h.blhSourceOfOrder
+eposActive: 0
+parCstNo: 0
+partyPhoneNo: h.partyPhoneNo
+semOutlet: "0"
+shikharOutletAutoPosting: "0"
+vehicleId: "1"

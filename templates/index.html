@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<script>
+	var times;
+	var loc = window.location.href;
+	loc = loc.replace('billindex', '');
+	console.log(loc);
+	//var location = 'http://127.0.0.1:5000/';
+	function starts() {
+		started = document.getElementById('marquee').innerText;
+		if (started.indexOf('Start') == -1) {
+			alert('Already in progress.. ')
+		}
+		else {
+			try {
+				clearInterval(times);
+			}
+			catch {
+				console.log(1);
+			}
+			var date = new Date();
+			if (document.getElementById('count').value) {
+				count_bills = document.getElementById('count').value.toString();
+			}
+			else {
+				count_bills = '10';
+			}
+			document.getElementById('marquee').innerText = 'Last Updated : ' + date.toLocaleTimeString();
+			window.open(loc + 'start\\' + count_bills, '_blank');
+			var times = setInterval(function () {
+				var date = new Date();
+				document.getElementById('marquee').innerText = 'Last Updated : ' + date.toLocaleTimeString();
+				window.open(loc + 'start\\' + count_bills, '_blank');
+			}, parseInt(document.getElementById('sleep').value) * 1000 * 60);
+		}
+	}
+	function quits() {
+		clearInterval(times);
+	}
+	function query() {
+		window.open(loc + 'billquery', '_blank');
+	}
+	function manual() {
+		window.open(loc + 'billprint', '_blank');
+	}
+</script>
+
+<style>
+    .indicator {
+        height: 25px;
+        width: 25px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<body>
+<marquee id='marquee'> Start the process </marquee>
+<input type='text' id='count' placeholder='Maximum alloted line'>
+<input type='text' id='sleep' placeholder='Sleep time in minutes' value='15'>
+<button onclick='starts(); '> Start </button>
+<button onclick='quits();'> Quit </button>
+<button onclick='manual();'>Manual Printing</button>
+<button onclick='query();'> Bill Status </button>
+<div id="app">
+	<div v-for="name,process in Object.entries(status)">
+		 <div > {{name}} </div>
+		 <div> {{process["status"]}} </div>
+		 <div> {{process["log"]}} </div>
+	</div>
+	<button v-on:click="getstatus()" >ass</button>
+</div>
+</body>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: {
+			colors = ["grey", "green", "yellow", "red"] 
+	   },
+		methods: {
+			getstatus:  function () {
+                this.status =  $.ajax({
+					 url: "/status",
+					 method: "POST",
+					 async:false 
+				});
+                this.status = this.status["responseJSON"]
+				console.log(this.status);
+			}
+		}
+	});
+</script>
+
+
+

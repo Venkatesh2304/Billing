@@ -1,0 +1,72 @@
+return $.ajax({
+		url : '/rsunify/app/fileUploadId/download',
+		type : "POST",
+		data : {},
+		success: function(data){return data
+		}}) 
+		
+		
+		
+		
+		//model data : NO_RECORDS$del Pushed pending bills count:0<br>Received UPI payment bills count:0<br>Pushed collected bills count:0
+		
+		
+		
+var filterData = {beatName: "",
+beatNameList: [],
+blhFromDt: "",
+blhSourceOfOrder: 0,
+blhToDt: "",
+locNameList: [],
+localityId: "",
+optimusSelect: 0,
+salesmanNameList: [],
+shakthiBusiness: "N",
+vehId: 0
+		}
+var x ;
+		$.ajax({
+		url : '/rsunify/app/deliveryprocess/billsToBeDeliver.do',
+		type : "POST",
+		contentType :"application/json; charset=utf-8" ,
+		dataTye:"json",
+		data : JSON.stringify(filterData),
+		success: function(data1){ x = data1 ;
+		}}) //model : obj -> billHdBeanList ->array (displaybill) (trip countforday)
+		
+//sending delivery :
+//they are taken as array and posted
+
+
+var billist = [{ 
+blhDateStr:p.blhDateStr ,
+blhNetAmt:p.blhNetAmt ,
+blhRefrNo:p.blhRefrNo,
+blhSourceOfOrder:p.blhSourceOfOrder ,
+eposActive:p.eposActive ,
+parCstNo:p.parCstNo,
+partyPhoneNo:p.partyPhoneNo,
+semOutlet:p.semOutlet,
+shikharOutletAutoPosting:p.shikharOutletAutoPosting ,
+vehicleId: "1"}]  ;
+
+var deliveryProcessVO = JSON.stringify({ "deliveryProcessVOList":billist });
+$.ajax({
+		url : '/rsunify/app/deliveryprocess/savebill.do',
+		type : "POST",
+		contentType :"application/json; charset=utf-8" ,
+		dataTye:"json",
+		data : JSON.stringify(deliveryProcessVO),
+		success: function(data1){console.log(data1)
+		}}) 
+		
+blhDateStr: h.blhDateStr
+blhNetAmt: h.blhNetAmt,
+blhRefrNo: h.blhRefrNo
+blhSourceOfOrder: h.blhSourceOfOrder
+eposActive: 0
+parCstNo: 0
+partyPhoneNo: h.partyPhoneNo
+semOutlet: "0"
+shikharOutletAutoPosting: "0"
+vehicleId: "1"

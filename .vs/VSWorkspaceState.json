@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\IMP",
+    "\\static",
+    "\\templates",
+    "\\__pycache__"
   ],
-  "SelectedNode": "\\config.txt",
+  "SelectedNode": "\\index.py",
   "PreviewInSolutionExplorer": false
 }

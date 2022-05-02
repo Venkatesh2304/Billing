@@ -1,0 +1,1 @@
+{'user':'IT' ,'pass':'Hul@1234','rs':'41A320','headless':False,'sleeptime':1,'website':'https://leveredge55.hulcd.com/rsunify/','salesman':0,'beat':1,'name':'GSU','secadd':'KAMBAR','secname':'SHREE'} 
