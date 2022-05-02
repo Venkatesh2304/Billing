@@ -1,5 +1,6 @@
 from flask import Flask,render_template,request,redirect,send_file
 from os import remove
+from ad import b
 from importbills import *
 import secondarybills
 import downbills
@@ -13,7 +14,7 @@ import webbrowser
 from flask_cors import CORS
 from collections import defaultdict
 import dill as pickle 
-
+a = 0
 app = Flask(__name__)
 CORS(app)
 def save() :
@@ -37,7 +38,7 @@ class Date :
         self.collection = []
         self.success = 0 
         self.failure = 0 
-    def addlogs(self,count_bills = 50) :
+    def addlogs(self,count_bills = 10) :
         print("New Process started")
         log = Log(count_bills,self) 
         print(log,"done")
@@ -52,6 +53,10 @@ class Date :
         self.lines_count.update(log.lines_count)
         self.collection += [ collection["parCode"] for collection in  log.filtered_collection ]
         print(log.collection,log.bills,self.bills,log.creditlock )
+        global a 
+        a = log.creditlock
+        global b
+
         if log.collection == 1   : 
                self.creditlock = log.creditlock
         save()

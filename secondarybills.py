@@ -81,7 +81,7 @@ def collection(file,document) :
     paragraph3.bold=True
     f=open('config.txt')
     #lines = eval(f.read())['lines']
-    lines=23
+    lines=30
     f.close()
     if i%2 == 0:
      document.add_paragraph('\n'*lines) 
