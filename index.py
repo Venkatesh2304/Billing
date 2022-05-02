@@ -15,6 +15,7 @@ from flask_cors import CORS
 from collections import defaultdict
 import dill as pickle 
 a = 0
+b=0
 app = Flask(__name__)
 CORS(app)
 def save() :
@@ -56,7 +57,7 @@ class Date :
         global a 
         a = log.creditlock
         global b
-
+        b = log.collection
         if log.collection == 1   : 
                self.creditlock = log.creditlock
         save()
@@ -70,6 +71,7 @@ class Date :
 @app.route('/start/<count>',methods = ["POST"])
 def start(count) :
     res = today.addlogs()
+    print(a,b)
     return res  
 
 @app.route('/status',methods = ["POST"])
