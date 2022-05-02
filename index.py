@@ -53,7 +53,6 @@ class Date :
                 self.lines_count[key] = value
         self.lines_count.update(log.lines_count)
         self.collection += [ collection["parCode"] for collection in  log.filtered_collection ]
-        print(log.collection,log.bills,self.bills,log.creditlock )
         global a 
         a = log.creditlock
         global b
