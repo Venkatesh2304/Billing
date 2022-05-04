@@ -1,7 +1,6 @@
 <script>
  function add() {
-	 var billto, name;
-	 name = '{{name}}';
+	var billto, name;
     var billfrom = document.getElementById('from').value ;
     if (document.getElementById('to').value == '' ) {
 	 billto=billfrom
@@ -9,8 +8,8 @@
 	else {
 	  billto =document.getElementById('to').value ;
 	 }
-	 document.getElementById('p').value = document.getElementById('p').value + name +billfrom+'-'+name+billto+'**' ;
-	  document.getElementById('copy').innerText= document.getElementById('copy').innerText+name+billfrom+'-'+name+billto+'\n' ;
+	 document.getElementById('p').value = document.getElementById('p').value  +billfrom+'-'+billto+'**' ;
+	  document.getElementById('copy').innerText= document.getElementById('copy').innerText+billfrom+'-'+billto+'\n' ;
  }
 </script>
 <form method='POST' action='/print' >

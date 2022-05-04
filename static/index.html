@@ -133,7 +133,8 @@
 			is_process_running:true ,
 			creditlock: [] ,
 			stats: {},
-			timer : 0 
+			timer: 0,
+			frequency_status: 3000  // stsus update in ms.
 		},
 		methods: {
 			start: function () {
@@ -172,7 +173,7 @@
 							async: false
 						});
 						this.status = this.status["responseJSON"]
-					}, 1000);
+					}, this.frequency_status);
 				}
 			} ,
 			stopgetstatus: function () {

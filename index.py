@@ -1,9 +1,7 @@
 from flask import Flask,render_template,request,redirect,send_file
 from os import remove
-from ad import b
 from importbills import *
 import secondarybills
-import downbills
 from time import sleep
 import sys
 import firebase_admin
@@ -14,13 +12,12 @@ import webbrowser
 from flask_cors import CORS
 from collections import defaultdict
 import dill as pickle 
-a = 0
-b=0
+
 app = Flask(__name__)
 CORS(app)
 def save() :
    with open("logs.pkl", "wb") as f : 
-     pickle.dump(Logs,f) 
+     pickle.dump(Logs,f, byref=True,recurse=True) 
  
 
 def getstringbills(arr) : 
@@ -42,7 +39,6 @@ class Date :
     def addlogs(self,count_bills = 10) :
         print("New Process started")
         log = Log(count_bills,self) 
-        print(log,"done")
         self.current_log = log
         log.start()
         self.failure += (1 if log.failure else 0 )
@@ -53,12 +49,7 @@ class Date :
                 self.lines_count[key] = value
         self.lines_count.update(log.lines_count)
         self.collection += [ collection["parCode"] for collection in  log.filtered_collection ]
-        global a 
-        a = log.creditlock
-        global b
-        b = log.collection
-        if log.collection == 1   : 
-               self.creditlock = log.creditlock
+        self.creditlock = log.creditlock 
         save()
         return  { "stats" : { "Current Process Bills Count" :len(log.bills)  ,'Current Process Collection Count' : len(log.collection)  ,
                  "Today Total Bills Count": len(self.bills)  ,'Today Total Collection Count' : len(self.collection) ,
@@ -70,27 +61,69 @@ class Date :
 @app.route('/start/<count>',methods = ["POST"])
 def start(count) :
     res = today.addlogs()
-    print(a,b)
     return res  
 
 @app.route('/status',methods = ["POST"])
 def status() :
     return today.current_log.status()
-   
+
+@app.route('/configget',methods=['POST',"GET"])
+def configget() :
+        return config 
+@app.route('/configsave',methods=['POST'])
+def configsave() :
+    new_config = request.form 
+    global config 
+    config.update(new_config)
+    with open('config.txt','w+') as f :
+        f.write(str(config))
+    return config 
+@app.route('/config') 
+def renderconfig() :
+    return app.send_static_file('config.html')
  
+
+@app.route('/billprint')
+def billprint() :
+    return app.send_static_file('billprint.html')
+@app.route('/print',methods=['POST'])
+def prints() :
+    bills=[]
+    billprefix = config["name"]
+    x=request.form['p']
+    for i in x.split('**') :
+        if i=='' :
+            continue
+        else :
+            try :
+              billfrom=i.split('-')[0]
+              billto=i.split('-')[1]
+              billfrom = billprefix + billfrom.replace(billprefix,"")
+              billto = billprefix + billto.replace(billprefix,"")
+              bills.append([billfrom,billto])
+            except Exception as e:
+                print(e)
+    temp = Log(0,0) 
+    print_type = { "duplicate" : 1 ,"original":0}
+    if request.form["types"] == "Both copy"  :
+        print_type["original"] = 1 
+    temp.manualprint(bills,print_type)
+    return redirect('/billprint')
+
+
+
 
 @app.route('/billindex')
 def index() :
     return app.send_static_file('index.html')
 try : 
-  with open('logs.pkl','rb') as f : 
-   Logs = pickle.load(f)
+  with open('logsk.pkl','rb') as f : 
+   Logs = pickle.load(f,ignore=False)
 except :
     print("New Logs created , Before is stuck couldnt retrieve ")
     Logs = defaultdict(Date)
-#with open('logs.pkl','rb') as f : 
-#   Logs = pickle.load(f)
 
+print(type(Logs))
 today = Logs[datetime.now().strftime('%d/%m/%Y')]
 dates = list(Logs.keys())
 dates.sort(key = lambda date : datetime.strptime(date,'%d/%m/%Y'))
@@ -99,7 +132,8 @@ if len(dates) >= 10 :
 Logs = {key:value for key,value in Logs.items() if key in dates }
 
 
-
+with open('config.txt') as f : 
+     config = eval(f.read())
 
 webbrowser.open('http://127.0.0.1:5000/billindex')
 app.config['JSON_SORT_KEYS'] = False

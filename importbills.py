@@ -33,7 +33,7 @@ class logdict(dict) :
         self.status = 0 
         self.log = ""
         self.ajax = ""
-def interpret(file) : 
+def interpret(file,valid_partys) : 
    with open(file) as f : 
       ikea_log = f.read()
    ikea_log = ikea_log.split('Order import process started')[-1]
@@ -42,10 +42,8 @@ def interpret(file) :
    for log in ikea_log : 
        if "Credit Bills" in log :
            creditlock.append(log.split(',')[1])
+   creditlock = [ party for party in creditlock if party.replace(' ','') in valid_partys ] 
    return creditlock
-
-    
-
 
 class Log : 
    def __init__(self,count,today):
@@ -110,6 +108,10 @@ class Log :
                                 "date":self.date.strftime("%d/%m/%Y"), "rand": random.randint(100,999) ,"collections" : json.dumps(self.filtered_collection) })
    def Order(self,driver) : 
       order_data = self.marketorder["quantumImportList"]
+      valid_partys = [] 
+      for order in  order_data : 
+         if order["allocQty"] != 0 : 
+               valid_partys.append(order["parName"])
       orders = defaultdict(list)
       for order in order_data : 
           orders[order["orderNumber"]].append(order)
@@ -138,7 +140,7 @@ class Log :
       logfilepath = self.order.log["filePath"]
       logfile = download(driver,logfilepath,override = True)
       self.logfile = logfile 
-      self.creditlock = interpret(logfile)
+      self.creditlock = interpret(logfile,valid_partys)
       self.creditlock = list(set(self.creditlock))
       return self.order.log 
    def Delivery(self,driver) : 
@@ -168,15 +170,17 @@ class Log :
         else :
             time.sleep(0.5)
       return (pdf,txt)
-   def Printbill(self,driver) : 
+   def Printbill(self,driver,print_type = {"original":1,"duplicate":1}) : 
      original = self.pdf 
      duplicate = self.txt 
      rename(path+original,path+'output\\'+original)
      secondarybills.main(path+duplicate,path+'output\\'+duplicate.split('.')[0]+'.docx')
      self.secondcopy = path+'output\\'+duplicate.split('.')[0]+'.docx' 
-     self.firstcopy = path+'output\\'+original
-     win32api.ShellExecute (0,'print',path+'output\\'+duplicate.split('.')[0]+'.docx',None, '.', 0 )
-     win32api.ShellExecute (0,'print',path+'output\\'+original,None, '.', 0 )
+     self.firstcopy = path+'output\\'+original  
+     for i in range(0,print_type["duplicate"] ) :  
+        win32api.ShellExecute (0,'print',path+'output\\'+duplicate.split('.')[0]+'.docx',None, '.', 0 )
+     for i in range(0,print_type["original"] ) :
+        win32api.ShellExecute (0,'print',path+'output\\'+original,None, '.', 0 )
      return "Finished Printing"
    def status(self) :
      res = {}
@@ -188,9 +192,12 @@ class Log :
      return res 
 
 
-
-
- 
-
-
-
+   def manualprint(self,bills_list,print_type) : 
+       driver = login(path) 
+       for bills in bills_list : 
+            self.bills = bills 
+            self.Download(driver) 
+            self.Printbill(driver,print_type) 
+            print("finsihed : ",self.bills)
+            
+            

@@ -34,13 +34,13 @@ def login(paths) :
  prefs = {'download.default_directory' : path ,'safebrowsing.enabled': 'false',"profile.default_content_setting_values.automatic_downloads":1}
  options.add_experimental_option('prefs', prefs)
  driver = webdriver.Chrome(r'chromedriver.exe',options=options)
- f=open('login.txt')
+ f=open('config.txt')
  userdata=eval(f.read())
  f.close()
- if int(userdata['headless'])==1 :
+ if userdata['headless'] ==1 :
   driver.set_window_position(-10000,0)
- user,password,rs=userdata['usereway'],userdata['passwordeway'],userdata['rs']
- driver.get('https://leveredge102.hulcd.com/rsunify/')
+ user,password,rs=userdata['username'],userdata['password'],userdata['rs']
+ driver.get(userdata["website"])
  searchbox = driver.find_element_by_xpath('//*[@id="userName"]')
  searchbox.send_keys(user)
  searchbox1 = driver.find_element_by_xpath('//*[@id="password"]')

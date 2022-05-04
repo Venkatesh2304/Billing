@@ -1,1 +1,1 @@
-{'user':'VEN' ,'pass':'Ven2005@','rs':'41A392','headless':False,'sleeptime':1,'website':'https://leveredge102.hulcd.com/rsunify/','salesman':1,'beat':0,'name':'DEV','secadd':'ARIYA','secname':'DEVAKI'} 
+{'username': 'VEN', 'password': 'Ven2006@', 'rs': '41A392', 'headless': 0, 'website': 'https://leveredge102.hulcd.com/rsunify/', 'name': 'TKS', 'lines': '25', 'secadd': 'ARIYA', 'secname': 'DEVAKI'}
