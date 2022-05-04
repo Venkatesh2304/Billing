@@ -42,7 +42,9 @@ def interpret(file,valid_partys) :
    for log in ikea_log : 
        if "Credit Bills" in log :
            creditlock.append(log.split(',')[1])
-   creditlock = [ party for party in creditlock if party.replace(' ','') in valid_partys ] 
+   print(creditlock,valid_partys)
+   creditlock = [ party for party in creditlock if party.replace(' ','') in valid_partys ]
+   print(creditlock)
    return creditlock
 
 class Log : 
@@ -111,7 +113,7 @@ class Log :
       valid_partys = [] 
       for order in  order_data : 
          if order["allocQty"] != 0 : 
-               valid_partys.append(order["parName"])
+               valid_partys.append(order["parName"].replace(' ',''))
       orders = defaultdict(list)
       for order in order_data : 
           orders[order["orderNumber"]].append(order)

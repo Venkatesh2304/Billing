@@ -1,0 +1,354 @@
+{
+  "parID": [
+    0,
+    "int"
+  ],
+  "parCODE": [
+    3,
+    "string"
+  ],
+  "parNAME": [
+    4,
+    "string"
+  ],
+  "parCODEHLL": [
+    5,
+    "string"
+  ],
+  "parCODEREF": [
+    3,
+    "string"
+  ],
+  "parADDRESS1": [
+    8,
+    "string"
+  ],
+  "parADDRESS2": [
+    9,
+    "string"
+  ],
+  "parADDRESS3": [
+    10,
+    "string"
+  ],
+  "parADDRESS4": [
+    11,
+    "string"
+  ],
+  "parPHONE": [
+    16,
+    "string"
+  ],
+  "parFAX": [
+    18,
+    "string"
+  ],
+  "parEMAILID": [
+    19,
+    "string"
+  ],
+  "parCONTACTPER": [
+    23,
+    "string"
+  ],
+  "parBEAT": [
+    49,
+    "int"
+  ],
+  "parBEATNAME": [
+    50,
+    "string"
+  ],
+  "parCLASS": [
+    38,
+    "int"
+  ],
+  "parTYPE": [
+    36,
+    "int"
+  ],
+  "parCATEGORY": [
+    40,
+    "int"
+  ],
+  "parSEGMENT": [
+    34,
+    "int"
+  ],
+  "parSTAR": [
+    43,
+    "int"
+  ],
+  "parACHEAD": [
+    15,
+    "int"
+  ],
+  "parCSTNO": [
+    24,
+    "string"
+  ],
+  "parSALETAXNO": [
+    11,
+    "string"
+  ],
+  "parDRUGLICENO": [
+    11,
+    "string"
+  ],
+  "parSTATUS": [
+    47,
+    "int"
+  ],
+  "parFOC": [
+    15,
+    "int"
+  ],
+  "parCRBILLS": [
+    15,
+    "int"
+  ],
+  "parCRLIMIT": [
+    15,
+    "int"
+  ],
+  "parCRDAYS": [
+    15,
+    "int"
+  ],
+  "parCRBILLSUTILISED": [
+    15,
+    "int"
+  ],
+  "parCRLIMITUTILISED": [
+    15,
+    "int"
+  ],
+  "parCRDAYSUTILISED": [
+    15,
+    "int"
+  ],
+  "parOTHDET1": [
+    33,
+    "string"
+  ],
+  "parOTHDET2": [
+    11,
+    "string"
+  ],
+  "parOTHDET3": [
+    11,
+    "string"
+  ],
+  "parOUTSTAND": [
+    56,
+    "float"
+  ],
+  "parSTARTYPE": [
+    31,
+    "string"
+  ],
+  "parSEQUENCE": [
+    15,
+    "int"
+  ],
+  "parINCGRP": [
+    15,
+    "int"
+  ],
+  "parHLLCHANNEL": [
+    11,
+    "string"
+  ],
+  "parHLLCLASS": [
+    11,
+    "string"
+  ],
+  "parHLLTYPE": [
+    11,
+    "string"
+  ],
+  "parDISCTYPE": [
+    15,
+    "int"
+  ],
+  "parVAT": [
+    31,
+    "int"
+  ],
+  "parVATCODE": [
+    55,
+    "string"
+  ],
+  "parBANKID": [
+    15,
+    "int"
+  ],
+  "parWEDDING": [
+    20,
+    "string"
+  ],
+  "parDOB": [
+    20,
+    "string"
+  ],
+  "parCHILDREN": [
+    15,
+    "int"
+  ],
+  "parTIER": [
+    45,
+    "int"
+  ],
+  "parTSIEDIT": [
+    15,
+    "int"
+  ],
+  "parIsSmsReq": [
+    47,
+    "int"
+  ],
+  "parIsTcsReq": [
+    15,
+    "int"
+  ],
+  "tdsEnabled": [
+    15,
+    "int"
+  ],
+  "parBEATTYPE": [
+    47,
+    "int"
+  ],
+  "parACNREFCODE": [
+    6,
+    "string"
+  ],
+  "parBEATTYPECOMPLIANCE": [
+    31,
+    "int"
+  ],
+  "parCITY": [
+    12,
+    "string"
+  ],
+  "parSTATE": [
+    13,
+    "string"
+  ],
+  "parCOUNTRY": [
+    14,
+    "string"
+  ],
+  "parPIN": [
+    15,
+    "string"
+  ],
+  "parKEYCUSTOMER": [
+    84,
+    "string"
+  ],
+  "parSHOPAREA": [
+    57,
+    "string"
+  ],
+  "parTOTALEMPLOYEES": [
+    15,
+    "int"
+  ],
+  "parTOTALFREEZERS": [
+    15,
+    "int"
+  ],
+  "parCCMACHINE": [
+    29,
+    "string"
+  ],
+  "parSHOPAC": [
+    84,
+    "string"
+  ],
+  "parBILLING": [
+    66,
+    "string"
+  ],
+  "parOWNERSHIP": [
+    67,
+    "string"
+  ],
+  "parTOTALREFRIG": [
+    15,
+    "int"
+  ],
+  "parSTOREFORMAT": [
+    29,
+    "string"
+  ],
+  "parTOTALOUTLETOWNED": [
+    15,
+    "int"
+  ],
+  "parVISIBILITYSPACEAVAILABLE": [
+    29,
+    "string"
+  ],
+  "parCREATEDDATE": [
+    1,
+    "string"
+  ],
+  "parLASTUPDATEDDATE": [
+    2,
+    "string"
+  ],
+  "parU1U2TYPE": [
+    42,
+    "string"
+  ],
+  "parCreditPLG": [
+    47,
+    "int"
+  ],
+  "parStateId": [
+    47,
+    "int"
+  ],
+  "parAadharNum": [
+    11,
+    "string"
+  ],
+  "gstnChildParty": [
+    15,
+    "int"
+  ],
+  "fsssaiChildParty": [
+    15,
+    "int"
+  ],
+  "aadhaarChildParty": [
+    15,
+    "int"
+  ],
+  "panChildParty": [
+    15,
+    "int"
+  ],
+  "dl20B": [
+    11,
+    "string"
+  ],
+  "dl20BExpDate": [
+    67,
+    "string"
+  ],
+  "dl21B": [
+    11,
+    "string"
+  ],
+  "dl21BExpDate": [
+    67,
+    "string"
+  ],
+  "parNutsStoreId": [
+    98,
+    "string"
+  ]
+}

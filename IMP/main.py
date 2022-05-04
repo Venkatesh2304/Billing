@@ -150,7 +150,6 @@ def download(driver,dpath,override = False) :
 def ajax_plain(driver,url) :
     ajax = ajax_template.split('_plain_')[1]
     ajax = ajax.replace('_url_',url)
-    print('plain')
     return driver.execute_script(ajax)
 def report_ajax(driver,keyword,replaces,make_download=False) : 
     ajax = ajax_template.split('_'+keyword+'_')[1]

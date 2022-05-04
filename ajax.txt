@@ -275,6 +275,9 @@ _setcollection_
 JSON.stringify({"collectionDetails":JSON.parse(`_collections_`),"importDate":"_date_","rsBankId":1,"CLIENT_REQ_UID":"l2hgg_rand_vt8agyg4sjf"})
 _setcollection_ 
 
+_setcredit_
+{"jsonobjpartyMasterScreen": JSON.stringify(_data_) }
+_setcredit_
 
 
 _datarequest_
