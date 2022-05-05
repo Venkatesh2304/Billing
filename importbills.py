@@ -20,7 +20,7 @@ import random
 import pickle 
 import traceback
 import inspect
-
+from creditlock import *
 
 path = "D:\\dataprint\\"
 def getajax(name) :
@@ -33,35 +33,48 @@ class logdict(dict) :
         self.status = 0 
         self.log = ""
         self.ajax = ""
-def interpret(file,valid_partys) : 
+def creditunlock(driver,pdata) :
+   for party_data in pdata : 
+     releaselock(driver,party_data)
+
+def interpret(file,valid_partys,driver) : 
    with open(file) as f : 
       ikea_log = f.read()
    ikea_log = ikea_log.split('Order import process started')[-1]
    ikea_log = ikea_log.split('\n')
-   creditlock = []
+   tempcreditlock = []
    for log in ikea_log : 
        if "Credit Bills" in log :
-           creditlock.append(log.split(',')[1])
-   print(creditlock,valid_partys)
-   creditlock = [ party for party in creditlock if party.replace(' ','') in valid_partys ]
-   print(creditlock)
+           tempcreditlock.append(log.split(',')[1])
+   creditlock = {}
+   for party in tempcreditlock :
+      party = party.replace(' ','')
+      if  party in valid_partys.keys() :
+             party_data = valid_partys[party]
+             party_data["billsutilised"] = getlockdetails(driver,party_data) 
+             creditlock[party] = valid_partys[party] 
    return creditlock
 
 class Log : 
-   def __init__(self,count,today):
+   def __init__(self,count,today,creditrelease = {}):
        self.time = datetime.now()
        self.process_time = defaultdict(lambda:-1)
        self.date = datetime.now() 
-       self.count = count 
+       self.count = int(count) 
        self.error = ""
        self.last = ""
        self.start_time = time.time()
        self.bills = []
        self.filtered_collection = []
        self.lines_count = {}
-       self.creditlock = []
+       self.creditlock = {}
        self.today = today 
        self.failure = False
+       print(creditrelease)
+       if len(creditrelease.keys()) ==  0 : 
+           self.creditrelease = [] 
+       else : 
+           self.creditrelease =   [ data for name,data in creditrelease.items() if data["status"]  ]
        self.attrib = ["sync","prevbills","collection","order","delivery","download","printbill"]
        for name in self.attrib :
           setattr(self,name,logdict())
@@ -72,7 +85,8 @@ class Log :
        process("sync",args)
        process("prevbills",args)
        process("collection",args)
-       process("order",args)
+       #process("order",args)
+       self.Order(driver)
        process("delivery",args)
        if "bills" in self.__dict__.keys()  and self.bills is not None and len(self.bills) != 0 :
            process("download",args)
@@ -108,20 +122,19 @@ class Log :
        self.filtered_collection = [ collection for collection in collection_data  if collection["parCode"] not in self.today.collection ] 
        return data_ajax(driver,"setcollection",{"url" : "/rsunify/app/quantumImport/importSelectedCollection",
                                 "date":self.date.strftime("%d/%m/%Y"), "rand": random.randint(100,999) ,"collections" : json.dumps(self.filtered_collection) })
-   def Order(self,driver) : 
+   def Order(self,driver) :
+      pdata = self.creditrelease.copy()
+      creditunlock(driver,pdata)
       order_data = self.marketorder["quantumImportList"]
-      valid_partys = [] 
-      for order in  order_data : 
-         if order["allocQty"] != 0 : 
-               valid_partys.append(order["parName"].replace(' ',''))
       orders = defaultdict(list)
       for order in order_data : 
-          orders[order["orderNumber"]].append(order)
+          orders[order["orderNumber"]].append(order) 
       def filterorders() :
           filtered = [] 
           for orderno , items in  orders.items() :
              itm_det = items[0]
-             if orderno in self.allowed_bills and len(items) <= self.count and "WHOLE" not in itm_det["mkmName"]   :
+             if (orderno in self.allowed_bills and len(items) <= self.count and "WHOLE" not in itm_det["mkmName"]   and 
+                                                         sum( [ item["tur"]*item["totAllocQty"] for item in items ] ) > 100)  :
                  filtered += items
           return filtered 
       self.lines_count = { orderno:len(order) for orderno,order in orders.items() } #dummy rechanged
@@ -137,13 +150,18 @@ class Log :
                 self.repeated_bills.append(orderno)
       filtered = filterorders()
       self.orders = filtered 
+      valid_partys = defaultdict(lambda : {"billvalue" : 0 } )
+      for order in  self.orders : 
+         if order["assignQty"] != 0 : 
+               billvalue = valid_partys[order["parName"].replace(' ','')]["billvalue"] + (order["tur"]*order["assignQty"]) 
+               valid_partys[order["parName"].replace(' ','')] = {"parCode": order["parCode"] , "parCodeHll": order["parCodeHll"],
+                             "billvalue":round(billvalue,2)  ,"salesman":order["salName"],"parCodeRef": order["parCodeRef"] , "parId": order["parId"],"status":False }
       self.order.log  =  data_ajax(driver,"setmarketorder",{"url" : "/rsunify/app/quantumImport/importSelected","date":self.date.strftime("%d/%m/%Y"),
                           "rand": random.randint(100,999) ,"orders" : json.dumps(filtered) }) 
       logfilepath = self.order.log["filePath"]
       logfile = download(driver,logfilepath,override = True)
       self.logfile = logfile 
-      self.creditlock = interpret(logfile,valid_partys)
-      self.creditlock = list(set(self.creditlock))
+      self.creditlock = interpret(logfile,valid_partys,driver)
       return self.order.log 
    def Delivery(self,driver) : 
      delivery_all_json = driver.execute_script(getajax('getdelivery'))['billHdBeanList']
@@ -192,8 +210,6 @@ class Log :
        res[attr] = {"status" : attrib.status , "log":attrib.log ,"time": round(self.process_time[attr],2) ,
                     "class" : (classes[attrib.status]) } 
      return res 
-
-
    def manualprint(self,bills_list,print_type) : 
        driver = login(path) 
        for bills in bills_list : 

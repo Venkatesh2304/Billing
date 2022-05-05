@@ -12,6 +12,9 @@ import webbrowser
 from flask_cors import CORS
 from collections import defaultdict
 import dill as pickle 
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 app = Flask(__name__)
 CORS(app)
@@ -32,13 +35,13 @@ class Date :
         self.logs = []
         self.bills = []
         self.lines_count = {}
-        self.creditlock = [] 
+        self.creditlock = {}
         self.collection = []
         self.success = 0 
         self.failure = 0 
-    def addlogs(self,count_bills = 10) :
+    def addlogs(self,count_bills = 10,creditrelease={}) :
         print("New Process started")
-        log = Log(count_bills,self) 
+        log = Log(count_bills,self,creditrelease) 
         self.current_log = log
         log.start()
         self.failure += (1 if log.failure else 0 )
@@ -59,8 +62,8 @@ class Date :
        
 
 @app.route('/start/<count>',methods = ["POST"])
-def start(count) :
-    res = today.addlogs()
+def start(count) :  
+    res = today.addlogs(int(count),request.json)
     return res  
 
 @app.route('/status',methods = ["POST"])

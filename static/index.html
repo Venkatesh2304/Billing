@@ -77,7 +77,10 @@
         font-family: system-ui;
         color: brown;
     }
-    
+    .creditlock td {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
 	
 </style>
 
@@ -113,11 +116,19 @@
 				</tbody>
 			</table>
 			<div class="creditlock">
-				<div class="caption"> CREDIT LOCKING</div>
-				<div v-for="shop in creditlock" class="process"> {{shop}}</div>
-			</div>
+				<table>
+					<caption> CREDIT LOCKING</caption>
+					<tr v-for="[shop,data] in Object.entries(creditlock)" class="process">
+						<td> <input v-model="data['status']" type="checkbox" /> </td>
+						<td>{{shop}}</td>
+						<td>{{data["billsutilised"]}}</td>
+						<td>{{data["billvalue"]}}</td>
+						<td>{{data["salesman"]}}</td>
+					</tr>
+				</table>
 		</div>
 	</div>
+ </div>
 </body>
 <script>
 
@@ -131,7 +142,7 @@
 			repeat_time : 15 ,
 			current_loop: "",
 			is_process_running:true ,
-			creditlock: [] ,
+			creditlock: {} ,
 			stats: {},
 			timer: 0,
 			frequency_status: 3000  // stsus update in ms.
@@ -142,7 +153,9 @@
 				this.is_started = true;
 				var self = this ;
                 $.ajax({
-                    url: '\start\\' + this.count_bills,
+					url: '\start\\' + this.count_bills,
+                    contentType: "application/json",
+					data: JSON.stringify(this.creditlock),
 					method: "POST",
 					success: (data)  => {
 						self.stats = data["stats"];
