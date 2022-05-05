@@ -25,6 +25,7 @@
         justify-content: space-around;
         align-items: flex-start;
         margin-top: 50px;
+		min-height:200px ;
     }  
     td , .creditlock{
         border: none;
@@ -68,14 +69,16 @@
     }
     .creditlock {
         min-width: 400px;
-        overflow: scroll;
-        max-height: 300px;
+        margin-left: 350px;
+        width: fit-content;
     }
     caption,.caption {
         font-size: 20px;
         text-transform: uppercase;
         font-family: system-ui;
         color: brown;
+		width : max-content;
+		margin:auto ;
     }
     .creditlock td {
         padding-left: 8px;
@@ -106,6 +109,7 @@
 					</tr>
 				</tbody>
 			</table>
+
 			<table class="stats">
 				<caption>Report</caption>
 				<tbody>
@@ -115,20 +119,31 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="creditlock">
-				<table>
-					<caption> CREDIT LOCKING</caption>
-					<tr v-for="[shop,data] in Object.entries(creditlock)" class="process">
-						<td> <input v-model="data['status']" type="checkbox" /> </td>
-						<td>{{shop}}</td>
-						<td>{{data["billsutilised"]}}</td>
-						<td>{{data["billvalue"]}}</td>
-						<td>{{data["salesman"]}}</td>
-					</tr>
-				</table>
+
+		</div>
+	   
+		<div class="creditlock">
+			<table>
+				<caption> CREDIT LOCKING</caption>
+				<tr class="process">
+					 <td></td>
+					 <td></td>
+					 <td>Bills</td>
+					 <td>Outstanding</td>
+					 <td>Value</td>
+					<td>Salesman</td>
+				</tr>
+				<tr v-for="[shop,data] in Object.entries(creditlock)" class="process">
+					<td> <input v-model="data['status']" type="checkbox" /> </td>
+					<td>{{shop}}</td>
+					<td>{{data["billsutilised"]}}</td>
+					<td>{{data["creditlimit"]}}</td>
+					<td>{{data["billvalue"]}}</td>
+					<td>{{data["salesman"]}}</td>
+				</tr>
+			</table>
 		</div>
 	</div>
- </div>
 </body>
 <script>
 

@@ -51,7 +51,9 @@ def interpret(file,valid_partys,driver) :
       party = party.replace(' ','')
       if  party in valid_partys.keys() :
              party_data = valid_partys[party]
-             party_data["billsutilised"] = getlockdetails(driver,party_data) 
+             lock_data = getlockdetails(driver,party_data) 
+             party_data["billsutilised"] =  lock_data["billsutilised"]
+             party_data["creditlimit"] =  lock_data["creditlimit"]
              creditlock[party] = valid_partys[party] 
    return creditlock
 
@@ -154,7 +156,7 @@ class Log :
          if order["assignQty"] != 0 : 
                billvalue = valid_partys[order["parName"].replace(' ','')]["billvalue"] + (order["tur"]*order["assignQty"]) 
                valid_partys[order["parName"].replace(' ','')] = {"parCode": order["parCode"] , "parCodeHll": order["parCodeHll"],
-                             "billvalue":round(billvalue,2)  ,"salesman":order["salName"],"parCodeRef": order["parCodeRef"] , "parId": order["parId"],"status":False }
+                             "billvalue":round(billvalue,2) , "salesman":order["salName"],"parCodeRef": order["parCodeRef"] , "parId": order["parId"],"status":False }
       self.order.log  =  data_ajax(driver,"setmarketorder",{"url" : "/rsunify/app/quantumImport/importSelected","date":self.date.strftime("%d/%m/%Y"),
                           "rand": random.randint(100,999) ,"orders" : json.dumps(filtered) }) 
       logfilepath = self.order.log["filePath"]

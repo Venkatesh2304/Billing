@@ -38,7 +38,7 @@ def getlockdetails(driver,party_data) :
   for key,value in party_data.items() : 
       url_rec = url_rec.replace('_'+key+'_',str(value))
   req = ajax_plain(driver,url_rec)  
-  return req["creditBillsUtilised"]
+  return { "billsutilised" : req["creditBillsUtilised"] , "creditlimit": req["creditLimitUtilised"] } 
 
 def releaselock(driver,party_data) :  
   # party_data = { "parCode": "P-P18078" , "parCodeHll": "HUL-413724D-P3364","parCodeRef": "D-P18078" , "parId": 5582 }
