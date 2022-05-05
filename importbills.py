@@ -85,8 +85,7 @@ class Log :
        process("sync",args)
        process("prevbills",args)
        process("collection",args)
-       #process("order",args)
-       self.Order(driver)
+       process("order",args)
        process("delivery",args)
        if "bills" in self.__dict__.keys()  and self.bills is not None and len(self.bills) != 0 :
            process("download",args)
